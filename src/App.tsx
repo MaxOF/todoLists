@@ -1,37 +1,63 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {ToDoList} from "./components/ToDoList";
 import './App.css';
 
+import {TaskType} from "./components/ToDoList";
+import {v1} from "uuid";
+
+export type FilterValuesType = 'all'|'active'|'completed'
+
+
 function App() {
 
     const todoListTitle_1:string = "What to learn";
-    const todoListTitle_2:string = "What to buy";
 
-
-    const  tasks1 = [
-        { id: 1, title: "HTML&CSS", isDone: true},
-        { id: 2, title: "JS", isDone: true},
-        { id: 3, title: "ReactJS", isDone: false}
-    ]
-    const  tasks2 = [
-        { id: 1, title: "Hello World", isDone: true},
-        { id: 2, title: "I am Happy", isDone: true},
-        { id: 3, title: "Yo", isDone: false}
+    const initialState = [
+        {id: v1(), title: "HTML&CSS", isDone: true},
+        {id: v1(), title: "JS", isDone: true},
+        {id: v1(), title: "ReactJS", isDone: false}
     ]
 
+    const [tasks, setTasks] = useState<Array<TaskType>>(initialState)
+    const [filter, setFilter] = useState<FilterValuesType>('all')
+
+    const changeFilter =  (filter: FilterValuesType) => {
+        setFilter(filter)
+    }
+    const removeTask = (taskID: string) => {
+        setTasks(tasks.filter(task => task.id !== taskID))
+    }
+    const addTask = (newTaskTitle: string) => {
+        const newTask: TaskType = {
+            id: v1(),
+            title: newTaskTitle,
+            isDone: false
+        }
+        setTasks([...tasks, newTask])
+    }
+
+
+    let tasksForRender = tasks
+    if (filter === 'active') {
+        tasksForRender = tasks.filter(t => !t.isDone)
+    }
+    if (filter === 'completed') {
+        tasksForRender = tasks.filter(t => t.isDone)
+    }
 
     return (
         <div>
-            <ToDoList title={todoListTitle_1} tasks={tasks1}/>
-            <ToDoList title={todoListTitle_2} tasks={tasks2}/>
-
+            <ToDoList
+                title={todoListTitle_1}
+                tasks={tasksForRender}
+                removeTask={removeTask}
+                changeFilter={changeFilter}
+                addTask={addTask}
+            />
         </div>
     );
 }
 
-export function sum (a: number, b: number) {
-    return a + b;
-}
 
 export default App;
