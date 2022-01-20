@@ -3,32 +3,37 @@ import {TaskType} from "./Todolist";
 import {Checkbox, IconButton} from "@material-ui/core";
 import {EditableSpan} from "./EditableSpan";
 import {Delete} from "@material-ui/icons";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "./state/store";
+import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/tasks-reducer";
 
 
 export type TaskPropsType = {
     todolistId: string
-    task: TaskType
-    removeTask: (taskId: string, todolistId: string) => void
-    changeTaskStatus: (taskId: string, newIsDoneValue: boolean, todolistId: string) => void
-    changeTaskTitle: (taskId: string, newValue: string, todolistId: string) => void
+    taskId: string
+
 }
 
-export const Task = React.memo(({
+export const TaskRedux = React.memo(({
                                     todolistId,
-                                    task,
-                                    removeTask,
-                                    changeTaskStatus,
-                                    changeTaskTitle
+                                    taskId
 }: TaskPropsType) => {
+
+    const task = useSelector<AppRootStateType, TaskType>(state => state.tasks[todolistId]
+        .filter(task => task.id === taskId)[0])
+
+    const dispatch = useDispatch()
+
+
     console.log("Task")
-    const onClickHandler = useCallback(() => removeTask(task.id, todolistId), [task.id, removeTask, todolistId])
+    const onClickHandler = useCallback(() => dispatch(removeTaskAC(taskId, todolistId)), [taskId, todolistId])
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         let newIsDoneValue = e.currentTarget.checked;
-        changeTaskStatus(task.id, newIsDoneValue, todolistId);
-    }, [task.id, changeTaskStatus, todolistId])
+        dispatch(changeTaskStatusAC(taskId, newIsDoneValue, todolistId));
+    }, [taskId, todolistId])
     const onTitleChangeHandler = useCallback((newValue: string) => {
-        changeTaskTitle(task.id, newValue, todolistId);
-    }, [task.id, changeTaskTitle, todolistId])
+        dispatch(changeTaskTitleAC(task.id, newValue, todolistId));
+    }, [taskId, todolistId])
 
 
     return (
