@@ -20,7 +20,7 @@ export const Task = React.memo(({
                                     changeTaskStatus,
                                     changeTaskTitle
 }: TaskPropsType) => {
-    console.log("Task")
+
     const onClickHandler = useCallback(() => removeTask(task.id, todolistId), [task.id, removeTask, todolistId])
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         let newIsDoneValue = e.currentTarget.checked;
