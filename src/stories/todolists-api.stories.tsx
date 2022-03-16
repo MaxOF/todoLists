@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {todolistsAPI, TodolistType} from "../api/todolists-api";
+import {BaseResponseType, GetTasksResponse, TaskType, todolistsAPI, TodolistType} from "../api/todolists-api";
 
 export default {
     title: 'API',
@@ -17,7 +17,7 @@ export const GetTodolists = () => {
     return <div>{JSON.stringify(state)}</div>
 }
 export const CreateTodolist = () => {
-    const [state, setState] = useState<any>()
+    const [state, setState] = useState<string>()
     useEffect(() => {
         todolistsAPI.createTodolist('HEY MAN')
             .then(res => {
@@ -28,7 +28,7 @@ export const CreateTodolist = () => {
     return <div>{JSON.stringify(state)}</div>
 }
 export const DeleteTodolist = () => {
-    const [state, setState] = useState<any>()
+    const [state, setState] = useState<BaseResponseType>()
     const todolistId = '0169793c-61f8-4fd7-b634-7a159b1344fd'
     useEffect(() => {
         todolistsAPI.deleteTodolist(todolistId)
@@ -40,7 +40,7 @@ export const DeleteTodolist = () => {
     return <div>{JSON.stringify(state)}</div>
 }
 export const UpdateTodolistTitle = () => {
-    const [state, setState] = useState<any>()
+    const [state, setState] = useState<BaseResponseType>()
     const todolistId = '6797dddd-6d38-4b2c-9a47-c02295d2d6b1'
     const title = 'don`t forget to learn english every day'
     useEffect(() => {
@@ -68,7 +68,7 @@ export const GetTasks = () => {
 }
 
 export const CreateTask = () => {
-    const [state, setState] = useState<any>()
+    const [state, setState] = useState<TaskType>()
 
     useEffect(() => {
         const todolistId = '6797dddd-6d38-4b2c-9a47-c02295d2d6b1'
@@ -82,7 +82,7 @@ export const CreateTask = () => {
     return <div>{JSON.stringify(state)}</div>
 }
 export const DeleteTask = () => {
-    const [state, setState] = useState<any>()
+    const [state, setState] = useState<BaseResponseType>()
 
     useEffect(() => {
         const todolistId = 'dcee8987-720a-49dc-8df0-0259e195c1bc'
@@ -96,7 +96,7 @@ export const DeleteTask = () => {
     return <div>{JSON.stringify(state)}</div>
 }
 export const UpdateTaskTitle = () => {
-    const [state, setState] = useState<any>()
+    const [state, setState] = useState<TaskType>()
 
     useEffect(() => {
         const todolistId = 'c0edf98b-f213-4ed8-88f4-d62d0c2876f8'
