@@ -19,7 +19,7 @@ export const Task = React.memo(({
                                     removeTask,
                                     changeTaskStatus,
                                     changeTaskTitle
-}: TaskPropsType) => {
+                                }: TaskPropsType) => {
 
     const onClickHandler = useCallback(() => removeTask(task.id, todolistId), [task.id, removeTask, todolistId])
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -39,9 +39,9 @@ export const Task = React.memo(({
                 onChange={onChangeHandler}
             />
 
-            <EditableSpan value={task.title} onChange={onTitleChangeHandler} />
+            <EditableSpan value={task.title} onChange={onTitleChangeHandler}/>
             <IconButton onClick={onClickHandler}>
-                <Delete />
+                <Delete/>
             </IconButton>
         </div>
     );
