@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
-import {BaseResponseType, GetTasksResponse, TaskType, todolistsAPI, TodolistType} from "../api/todolists-api";
+import {BaseResponseType, TaskType, todolistsAPI, TodolistType} from "../api/todolists-api";
+
 
 export default {
     title: 'API',
