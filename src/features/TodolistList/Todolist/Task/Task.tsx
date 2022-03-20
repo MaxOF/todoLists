@@ -1,14 +1,14 @@
 import React, {ChangeEvent, useCallback} from 'react';
 import {Checkbox, IconButton} from "@material-ui/core";
-import {EditableSpan} from "./EditableSpan";
+import {EditableSpan} from "../../../../components/EditableSpan/EditableSpan";
 import {Delete} from "@material-ui/icons";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "./state/store";
+import {AppRootStateType} from "../../../../app/store";
 import {
     removeTaskTC,
     updateStatusTaskTC, updateTitleTaskTC
-} from "./state/tasks-reducer";
-import {TaskStatuses, TaskType} from "./api/todolists-api";
+} from "../../tasks-reducer";
+import {TaskStatuses, TaskType} from "../../../../api/todolists-api";
 
 
 export type TaskPropsType = {
@@ -17,7 +17,7 @@ export type TaskPropsType = {
 
 }
 
-export const TaskRedux = React.memo(({
+export const Task = React.memo(({
                                     todolistId,
                                     taskId
 }: TaskPropsType) => {

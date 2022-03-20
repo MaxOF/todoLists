@@ -3,7 +3,7 @@ import {BaseResponseType, TaskType, todolistsAPI, TodolistType} from "../api/tod
 
 
 export default {
-    title: 'API',
+    title: 'TODOLIST/API',
 }
 
 export const GetTodolists = () => {

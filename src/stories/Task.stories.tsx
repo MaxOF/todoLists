@@ -3,13 +3,13 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 
 import {action} from "@storybook/addon-actions";
-import {TaskRedux} from "../TaskRedux";
-import {ReduxStoreProviderDecorator} from "../state/ReduxStoreProviderDecorator";
+import {Task} from "../features/TodolistList/Todolist/Task/Task";
+import {ReduxStoreProviderDecorator} from "../app/ReduxStoreProviderDecorator";
 
 
 export default {
     title: 'TODOLIST/Task',
-    component: TaskRedux,
+    component: Task,
     decorators: [ReduxStoreProviderDecorator],
   //для общих аргументов
   args: {
@@ -17,7 +17,7 @@ export default {
     changeTaskStatus: action("changeTaskStatus"),
     changeTaskTitle: action("changeTaskTitle"),
   }
-} as ComponentMeta<typeof TaskRedux>;
+} as ComponentMeta<typeof Task>;
 
 //можно упростить строки 15-20
 // const baseArgs = {
@@ -27,7 +27,7 @@ export default {
 // }
 
 
-const Template: ComponentStory<typeof TaskRedux> = (args: any) => <TaskRedux {...args} />;
+const Template: ComponentStory<typeof Task> = (args: any) => <Task {...args} />;
 
 export const TaskIsDoneStory = Template.bind({});
 
