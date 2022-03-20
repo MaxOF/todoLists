@@ -3,19 +3,21 @@ import {ComponentStory, ComponentMeta} from '@storybook/react';
 
 
 import {action} from "@storybook/addon-actions";
-import {Task} from "../Task";
+import {TaskRedux} from "../TaskRedux";
+import {ReduxStoreProviderDecorator} from "../state/ReduxStoreProviderDecorator";
 
 
 export default {
     title: 'TODOLIST/Task',
-    component: Task,
+    component: TaskRedux,
+    decorators: [ReduxStoreProviderDecorator],
   //для общих аргументов
   args: {
     removeTask: action("Task has removed"),
     changeTaskStatus: action("changeTaskStatus"),
     changeTaskTitle: action("changeTaskTitle"),
   }
-} as ComponentMeta<typeof Task>;
+} as ComponentMeta<typeof TaskRedux>;
 
 //можно упростить строки 15-20
 // const baseArgs = {
@@ -25,20 +27,20 @@ export default {
 // }
 
 
-const Template: ComponentStory<typeof Task> = (args) => <Task {...args} />;
+const Template: ComponentStory<typeof TaskRedux> = (args: any) => <TaskRedux {...args} />;
 
 export const TaskIsDoneStory = Template.bind({});
 
 TaskIsDoneStory.args = {
     // ...baseArgs,
-    todolistId: 'id todolist',
-    task: {id: '1', title: 'JS', isDone: true},
+    todolistId: "todolistId2",
+    taskId: '3',
 };
 export const TaskIsNotDoneStory = Template.bind({});
 TaskIsNotDoneStory.args = {
     // ...baseArgs,
-    todolistId: 'id todolist',
-    task: {id: '1', title: 'HTML', isDone: false},
+    todolistId: "todolistId2",
+    taskId: '4',
 };
 
 
