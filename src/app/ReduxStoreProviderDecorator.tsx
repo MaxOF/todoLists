@@ -1,25 +1,26 @@
 import React from "react";
 import {Provider} from "react-redux";
 import {AppRootStateType} from "./store";
-import {combineReducers, createStore} from "redux";
-import {tasksReducer, TasksStateType} from "../features/TodolistList/tasks-reducer";
-import {TodolistDomainType, todolistsReducer} from "../features/TodolistList/todolists-reducer";
+import {applyMiddleware, combineReducers, createStore} from "redux";
+import {tasksReducer} from "../features/TodolistList/tasks-reducer";
+import {todolistsReducer} from "../features/TodolistList/todolists-reducer";
 import {TaskPriorities, TaskStatuses} from "../api/todolists-api";
+import {appReducer} from "./app-reducer";
+import thunk from "redux-thunk";
+
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
-    todolists: todolistsReducer
+    todolists: todolistsReducer,
+    app: appReducer
 })
 
-type InititalGlobalStateType = {
-    todolists: Array<TodolistDomainType>,
-    tasks: TasksStateType
-}
 
-const initialGlobalState: InititalGlobalStateType = {
+
+const initialGlobalState: AppRootStateType = {
     todolists: [
-        {id: "todolistId1", title: "What to learn", filter: "all", addedDate: '', order: 0},
-        {id: "todolistId2", title: "What to buy", filter: "all", addedDate: '', order: 1}
+        {id: "todolistId1", title: "What to learn", filter: "all", entityStatus: 'idle', addedDate: '', order: 0},
+        {id: "todolistId2", title: "What to buy", filter: "all", entityStatus: 'loading', addedDate: '', order: 1}
     ],
     tasks: {
         ["todolistId1"]: [
@@ -68,10 +69,14 @@ const initialGlobalState: InititalGlobalStateType = {
                 order: 0,
                 addedDate: ''}
         ]
+    },
+    app: {
+        status: 'idle',
+        error: null
     }
 };
 
-export const storyBookStore = createStore(rootReducer, initialGlobalState as AppRootStateType);
+export const storyBookStore = createStore(rootReducer, initialGlobalState, applyMiddleware(thunk));
 
 
 export const ReduxStoreProviderDecorator = (storeFn: () => React.ReactNode) => {

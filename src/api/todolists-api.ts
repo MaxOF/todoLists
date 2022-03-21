@@ -11,7 +11,8 @@ export type TodolistType = {
 }
 export type BaseResponseType<D = {}> = {
     resultCode: 0
-    messages: string[],
+    messages: string[]
+    fieldsErrors: Array<string>
     data: D
 }
 
@@ -42,7 +43,7 @@ export type TaskType =  {
     order: number
     addedDate: string
 }
-export type UpdateTaskModel = {
+export type UpdateTaskModelType = {
     description: string
     title: string
     status: TaskStatuses
@@ -87,7 +88,7 @@ export const todolistsAPI = {
     deleteTask(todolistId: string, taskId: string) {
         return instance.delete<BaseResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
     },
-    updateTask(todolistId: string, taskId: string, model: UpdateTaskModel) {
+    updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
         return instance.put<BaseResponseType<{item: TaskType}>>(`/todo-lists/${todolistId}/tasks/${taskId}`,  model)
     },
 

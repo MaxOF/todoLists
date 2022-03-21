@@ -9,20 +9,26 @@ import {
     TodolistDomainType,
     updateTodolistTC
 } from "./todolists-reducer";
-import {createTaskTC, TasksStateType} from "./tasks-reducer";
+import {createTaskTC, removeTaskTC, TasksStateType, updateTaskTC} from "./tasks-reducer";
 import React, {useCallback, useEffect} from "react";
 import {Grid, Paper} from "@material-ui/core";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
+import {TaskStatuses} from "../../api/todolists-api";
 
-type TodolistListPropsType = {}
-export const TodolistsList = (props: TodolistListPropsType) => {
+type TodolistListPropsType = {
+    demo?: boolean
+}
+export const TodolistsList = ({demo = false}: TodolistListPropsType) => {
 
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const dispatch = useDispatch();
 
     useEffect(() => {
+        if(demo) {
+            return
+        }
         dispatch(fetchTodolistsTC())
     }, [])
 
@@ -30,8 +36,19 @@ export const TodolistsList = (props: TodolistListPropsType) => {
     const addTask = useCallback((title: string, todolistId: string) => {
         dispatch(createTaskTC(todolistId, title));
     }, [dispatch])
+    const changeStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
+        const thunk = updateTaskTC(id, {status}, todolistId)
+        dispatch(thunk)
+    }, [])
 
-
+    const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
+        const thunk = updateTaskTC(id, {title: newTitle}, todolistId)
+        dispatch(thunk)
+    }, [])
+    const removeTask = useCallback(function (id: string, todolistId: string) {
+        const thunk = removeTaskTC(id, todolistId)
+        dispatch(thunk)
+    }, [])
     const changeFilter = useCallback((value: FilterValuesType, todolistId: string) => {
         const action = changeTodolistFilterAC(todolistId, value);
         dispatch(action);
@@ -59,16 +76,18 @@ export const TodolistsList = (props: TodolistListPropsType) => {
                 {
                     todolists.map(tl => {
                         return <Grid item key={tl.id}>
-                            <Paper style={{padding: "10px"}}>
+                            <Paper style={{padding:   "10px"}}>
                                 <Todolist
-                                    id={tl.id}
-                                    title={tl.title}
+                                    todolist={tl}
                                     tasks={tasks[tl.id]}
                                     changeFilter={changeFilter}
+                                    changeTaskStatus={changeStatus}
+                                    changeTaskTitle={changeTaskTitle}
                                     addTask={addTask}
-                                    filter={tl.filter}
                                     removeTodolist={removeTodolist}
                                     changeTodolistTitle={changeTodolistTitle}
+                                    removeTask={removeTask}
+                                    demo={demo}
                                 />
                             </Paper>
                         </Grid>

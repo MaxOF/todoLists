@@ -5,8 +5,7 @@ import {Delete} from "@material-ui/icons";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../../../app/store";
 import {
-    removeTaskTC,
-    updateStatusTaskTC, updateTitleTaskTC
+    removeTaskTC
 } from "../../tasks-reducer";
 import {TaskStatuses, TaskType} from "../../../../api/todolists-api";
 
@@ -14,28 +13,33 @@ import {TaskStatuses, TaskType} from "../../../../api/todolists-api";
 export type TaskPropsType = {
     todolistId: string
     taskId: string
-
+    changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void
+    changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
+    removeTask: (taskId: string, todolistId: string) => void
 }
 
 export const Task = React.memo(({
                                     todolistId,
-                                    taskId
-}: TaskPropsType) => {
+                                    taskId,
+                                    changeTaskStatus,
+                                    changeTaskTitle,
+                                    removeTask
+                                }: TaskPropsType) => {
 
     const task = useSelector<AppRootStateType, TaskType>(state => state.tasks[todolistId]
         .filter(task => task.id === taskId)[0])
 
     const dispatch = useDispatch()
 
-    const onClickHandler = useCallback(() => dispatch(removeTaskTC(taskId, todolistId)), [taskId, todolistId, dispatch])
+    const onClickHandler = useCallback(() => removeTask(taskId, todolistId), [taskId, todolistId])
 
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         let newIsDoneValue = e.currentTarget.checked;
-        dispatch(updateStatusTaskTC(taskId, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New, todolistId));
-    }, [taskId, todolistId, dispatch])
+        changeTaskStatus(taskId, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New, todolistId);
+    }, [taskId, todolistId])
 
     const onTitleChangeHandler = useCallback((newValue: string) => {
-        dispatch(updateTitleTaskTC(task.id, newValue, todolistId));
+        changeTaskTitle(task.id, newValue, todolistId)
     }, [taskId, todolistId])
 
 
@@ -47,9 +51,9 @@ export const Task = React.memo(({
                 onChange={onChangeHandler}
             />
 
-            <EditableSpan value={task.title} onChange={onTitleChangeHandler} />
+            <EditableSpan value={task.title} onChange={onTitleChangeHandler}/>
             <IconButton onClick={onClickHandler}>
-                <Delete />
+                <Delete/>
             </IconButton>
         </div>
     );
