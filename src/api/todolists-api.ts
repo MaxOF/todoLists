@@ -57,6 +57,12 @@ export type GetTasksResponse = {
     error: string | null
 }
 
+export type LoginParamsType = {
+    email: string
+    password: string
+    rememberMe: boolean
+}
+
 //api>>>>>>>
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -86,10 +92,21 @@ export const todolistsAPI = {
         return instance.post<BaseResponseType<{item: TaskType}>>(`todo-lists/${todolistId}/tasks`, {title})
     },
     deleteTask(todolistId: string, taskId: string) {
-        return instance.delete<BaseResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
+        return instance.delete<BaseResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
     },
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
-        return instance.put<BaseResponseType<{item: TaskType}>>(`/todo-lists/${todolistId}/tasks/${taskId}`,  model)
+        return instance.put<BaseResponseType<{item: TaskType}>>(`todo-lists/${todolistId}/tasks/${taskId}`,  model)
     },
+}
 
+export const authAPI = {
+    login(args: LoginParamsType) {
+        return instance.post<BaseResponseType<{userId: number}>>('auth/login', args)
+    },
+    me() {
+        return instance.get<BaseResponseType<{id: number, email: string, login: string}>>('auth/me')
+    },
+    logout() {
+        return instance.delete<BaseResponseType>('auth/login')
+    }
 }
