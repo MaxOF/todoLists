@@ -36,11 +36,8 @@ export const todolistsReducer =
             }
             case 'ADD-TODOLIST': {
                 return [{
-                    id: action.todolistId,
-                    title: action.title,
+                    ...action.todolist,
                     filter: 'all',
-                    addedDate: '',
-                    order: 0,
                     entityStatus: 'idle'
                 }, ...state]
             }
@@ -64,8 +61,8 @@ export const todolistsReducer =
 //actions>>>>>>>>>
 export const removeTodolistAC = (todolistId: string) =>
     ({type: 'REMOVE-TODOLIST', id: todolistId} as const)
-export const addTodolistAC = (title: string) =>
-    ({type: 'ADD-TODOLIST', title, todolistId: v1()} as const)
+export const addTodolistAC = (todolist: TodolistType) =>
+    ({type: 'ADD-TODOLIST', todolist} as const)
 export const changeTodolistTitleAC = (id: string, title: string) =>
     ({type: 'CHANGE-TODOLIST-TITLE', id, title} as const)
 export const changeTodolistFilterAC = (id: string, filter: FilterValuesType) =>
@@ -90,8 +87,8 @@ export const removeTodolistTC = (todolistId: string) => (dispatch: ThunkDispatch
     dispatch(changeTodolistEntityStatusAC(todolistId, 'loading'))
     todolistsAPI.deleteTodolist(todolistId)
         .then(() => {
-                dispatch(removeTodolistAC(todolistId))
-                dispatch(setAppStatusAC('succeeded'))
+            dispatch(removeTodolistAC(todolistId))
+            dispatch(setAppStatusAC('succeeded'))
         })
 
 }
@@ -106,8 +103,8 @@ export const updateTodolistTC = (todolistId: string, title: string) => (dispatch
 export const createTodolistTC = (title: string) => (dispatch: ThunkDispatch) => {
     dispatch(setAppStatusAC('loading'))
     todolistsAPI.createTodolist(title)
-        .then(() => {
-            dispatch(addTodolistAC(title))
+        .then(res => {
+            dispatch(addTodolistAC(res.data.data.item))
             dispatch(setAppStatusAC('succeeded'))
         })
 }
