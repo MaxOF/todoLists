@@ -3,6 +3,7 @@ import {todolistsAPI, TodolistType} from "../../api/todolists-api";
 import {Dispatch} from "redux";
 import {RequestStatusType, setAppStatusAC, SetAppStatusActionType} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetwork} from "../../utils/error-utils";
+import {fetchTasksTC} from "./tasks-reducer";
 
 //types>>>>>>>>>
 export type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>
@@ -15,6 +16,7 @@ export type TodolistDomainType = TodolistType & {
     filter: FilterValuesType
     entityStatus: RequestStatusType
 }
+export type clearTodosDataType = ReturnType<typeof clearTodosDataAC>
 
 type ActionsType =
     RemoveTodolistActionType
@@ -23,6 +25,7 @@ type ActionsType =
     | ReturnType<typeof changeTodolistTitleAC>
     | SetTodolistsActionType
     | ReturnType<typeof changeTodolistEntityStatusAC>
+    | clearTodosDataType
 
 type ThunkDispatch = Dispatch<ActionsType | SetAppStatusActionType>
 
@@ -53,6 +56,8 @@ export const todolistsReducer =
             case 'CHANGE-TODOLIST-ENTITY-STATUS': {
                 return state.map(tl => (tl.id === action.id ? {...tl, entityStatus: action.status} : tl))
             }
+            case 'CLEAR-TODOS-DATA':
+                return []
             default:
                 return state;
         }
@@ -71,15 +76,23 @@ export const setTodolistsAC = (todolists: Array<TodolistType>) =>
     ({type: 'SET-TODOLISTS', todolists} as const)
 export const changeTodolistEntityStatusAC = (id: string, status: RequestStatusType) =>
     ({type: 'CHANGE-TODOLIST-ENTITY-STATUS', id, status} as const)
+export const clearTodosDataAC = () =>
+    ({type: 'CLEAR-TODOS-DATA'} as const)
 
 
 //thunks>>>>>>>>
-export const fetchTodolistsTC = () => (dispatch: ThunkDispatch) => {
+export const fetchTodolistsTC = () => (dispatch: any) => {
     dispatch(setAppStatusAC('loading'))
     todolistsAPI.getTodolists()
         .then(res => {
             dispatch(setTodolistsAC(res.data))
             dispatch(setAppStatusAC('succeeded'))
+            return res.data
+        })
+        .then(todos => {
+            todos.forEach((tl) => {
+                dispatch(fetchTasksTC(tl.id))
+            })
         })
 }
 export const removeTodolistTC = (todolistId: string) => (dispatch: ThunkDispatch) => {
