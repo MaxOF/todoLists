@@ -26,6 +26,6 @@ export const store = configureStore({
 
 export type AppRootStateType = ReturnType<typeof rootReducer>
 
-// in order to apply to store in object window
+// in order to apply to store in object window in any moment
 // @ts-ignore
 window.store = store;
