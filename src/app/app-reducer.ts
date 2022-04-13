@@ -4,18 +4,26 @@ import {setIsLoggedInAC} from "../features/Login/auth-reducer";
 import {handleServerAppError, handleServerNetwork} from "../utils/error-utils";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
+
+//types >>>>>>
+
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+
+export type InitialStateType = {
+    status: RequestStatusType,
+    error: string | null,
+    isInitialized: boolean
+}
+
+//initial state >>>>>>
 
 const initialState: InitialStateType = {
     status: 'idle',
     error: null,
     isInitialized: false
 }
-export type InitialStateType = {
-    status: RequestStatusType,
-    error: string | null,
-    isInitialized: boolean
-}
+
+//slice >>>>>>
 
 const slice = createSlice({
     name: 'app',
@@ -36,7 +44,7 @@ const slice = createSlice({
 export const appReducer = slice.reducer
 export const {setAppErrorAC, setAppStatusAC, setIsInitializedAC} = slice.actions
 
-
+//thunks >>>>>>
 
 export const initializeAppTC = () => (dispatch: Dispatch) => {
     authAPI.me().then(res => {

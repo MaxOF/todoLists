@@ -2,12 +2,11 @@ import { Dispatch } from 'redux'
 import { setAppStatusAC } from '../../app/app-reducer'
 import {authAPI, LoginParamsType} from "../../api/todolists-api";
 import {handleServerAppError, handleServerNetwork} from "../../utils/error-utils";
-import {clearTodosDataAC, clearTodosDataType} from "../TodolistList/todolists-reducer";
+import {clearTodosDataAC} from "../TodolistList/todolists-reducer";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-
-
 //initial state >>>>>>
+
 const initialState = {
     isLoggedIn: false
 }
@@ -25,6 +24,7 @@ export const authReducer = slice.reducer
 export const {setIsLoggedInAC} = slice.actions
 
 // thunks >>>>>>
+
 export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC({status: 'loading'}))
     authAPI.login(data)
