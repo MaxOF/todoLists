@@ -24,7 +24,7 @@ type PropsType = {
     demo?: boolean
 }
 
-function App({demo = false}: PropsType) {
+function App({demo = true}: PropsType) {
 
     const dispatch = useDispatch()
     const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
