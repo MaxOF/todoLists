@@ -41,7 +41,7 @@ test('correct todolist should be added', () => {
     }))
 
     expect(endState.length).toBe(3);
-    expect(endState[2].title).toBe(newTodolistTitle);
+    expect(endState[0].title).toBe(newTodolistTitle);
     expect(endState[0].filter).toBe("all");
 });
 

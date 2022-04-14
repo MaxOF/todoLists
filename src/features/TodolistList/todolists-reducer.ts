@@ -36,7 +36,7 @@ const slice = createSlice({
         },
         addTodolistAC(state, action: PayloadAction<{todolist: TodolistType}>) {
             // if we want to use Update Pattern from immer js
-            state.push({...action.payload.todolist, filter: 'all', entityStatus: 'idle'})
+            state.unshift({...action.payload.todolist, filter: 'all', entityStatus: 'idle'})
         },
         changeTodolistTitleAC(state, action: PayloadAction<{id: string, title: string}>) {
             // if we want to use Update Pattern from immer js
