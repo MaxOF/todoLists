@@ -35,7 +35,7 @@ export const TodolistsList = ({demo = false}: TodolistListPropsType) => {
 
 
     const addTask = useCallback((title: string, todolistId: string) => {
-        dispatch(createTaskTC(todolistId, title));
+        dispatch(createTaskTC({todolistId, title}));
     }, [dispatch])
     const changeStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
         const thunk = updateTaskTC(id, {status}, todolistId)
@@ -47,7 +47,7 @@ export const TodolistsList = ({demo = false}: TodolistListPropsType) => {
         dispatch(thunk)
     }, [])
     const removeTask = useCallback(function (id: string, todolistId: string) {
-        const thunk = removeTaskTC(id, todolistId)
+        const thunk = removeTaskTC({taskId: id, todolistId})
         dispatch(thunk)
     }, [])
     const changeFilter = useCallback((value: FilterValuesType, todolistId: string) => {
