@@ -37,7 +37,26 @@ export const fetchTasksTC = createAsyncThunk('tasks/fetchTasks', (todolistId: st
             thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
             return {tasks: res.data.items, todolistId}
         })
+        .catch((error) => {
+            handleServerNetwork(error, thunkAPI.dispatch)
+        })
 })
+
+// export const createTaskTC = createAsyncThunk ('tasks/createTask', ((param: {todolistId: string, title: string}, thunkAPI) => {
+//     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
+//     return todolistsAPI.createTask(param.todolistId, param.title)
+//         .then(res => {
+//             if (res.data.resultCode === 0) {
+//                 thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
+//                 return {res.data.data.item}
+//             } else {
+//                 handleServerAppError(res.data, thunkAPI.dispatch)
+//             }
+//         })
+//         .catch((error) => {
+//             handleServerNetwork(error, thunkAPI.dispatch)
+//         })
+// }))
 
 
 const slice = createSlice({
@@ -80,9 +99,9 @@ const slice = createSlice({
                 state[tl.id] = []
             })
         });
-        builder.addCase(fetchTasksTC.fulfilled, (state, action) => {
-            state[action.payload.todolistId] = action.payload.tasks
-        });
+        // builder.addCase(fetchTasksTC.fulfilled, (state, action) => {
+        //     state[action.payload.todolistId] = action.payload.tasks
+        // });
     }
 })
 
@@ -99,21 +118,9 @@ export const {
 
 
   
-export const createTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC({status: 'loading'}))
-    todolistsAPI.createTask(todolistId, title)
-        .then(res => {
-            if (res.data.resultCode === 0) {
-                dispatch(addTaskAC(res.data.data.item))
-                dispatch(setAppStatusAC({status: 'succeeded'}))
-            } else {
-                handleServerAppError(res.data, dispatch)
-            }
-        })
-        .catch((error) => {
-            handleServerNetwork(error, dispatch)
-        })
-}
+
+
+
 export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC({status: 'loading'}))
     todolistsAPI.deleteTask(todolistId, taskId)
