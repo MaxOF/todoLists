@@ -9,10 +9,12 @@ export type TodolistType = {
     order: number
 
 }
+export type FieldErrorType = { field: string, error: string };
+
 export type BaseResponseType<D = {}> = {
     resultCode: 0
     messages: string[]
-    fieldsErrors: Array<string>
+    fieldsErrors: Array<FieldErrorType>
     data: D
 }
 
