@@ -5,7 +5,7 @@ import {
     tasksReducer,
     TasksStateType, updateTaskTC
 } from './tasks-reducer';
-import {addTodolistAC, removeTodolistAC, setTodolistsAC} from './todolists-reducer';
+import {addTodolistAC, fetchTodolistsTC, removeTodolistAC} from './todolists-reducer';
 import {TaskPriorities, TaskStatuses} from "../../api/todolists-api";
 
 let startState: TasksStateType = {};
@@ -197,12 +197,12 @@ test('propertry with todolistId should be deleted', () => {
 });
 test('correct task should be set to the todolist', () => {
 
-    const action = setTodolistsAC({
+    const action = fetchTodolistsTC.fulfilled({
         todolists: [
             {id: '1', title: "What to learn", addedDate: '', order: 0},
             {id: '2', title: "What to buy", addedDate: '', order: 1},
         ]
-    });
+    }, 'requestId');
 
     const endState = tasksReducer({}, action);
 
