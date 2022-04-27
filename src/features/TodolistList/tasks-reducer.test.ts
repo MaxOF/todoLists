@@ -1,4 +1,10 @@
-import {addTaskAC, fetchTasksTC, removeTaskTC, tasksReducer, TasksStateType, updateTaskAC} from './tasks-reducer';
+import {
+    createTaskTC,
+    fetchTasksTC,
+    removeTaskTC,
+    tasksReducer,
+    TasksStateType, updateTaskTC
+} from './tasks-reducer';
 import {addTodolistAC, removeTodolistAC, setTodolistsAC} from './todolists-reducer';
 import {TaskPriorities, TaskStatuses} from "../../api/todolists-api";
 
@@ -96,7 +102,8 @@ test('correct task should be deleted f rom correct array', () => {
     expect(endState["todolistId2"].every(t => t.id != "2")).toBeTruthy();
 });
 test('correct task should be added to correct array', () => {
-    const action = addTaskAC({
+
+    let task = {
         todoListId: "todolistId2",
         title: "juce",
         status: TaskStatuses.New,
@@ -107,7 +114,8 @@ test('correct task should be added to correct array', () => {
         order: 0,
         addedDate: '',
         id: '123'
-    });
+    }
+    const action = createTaskTC.fulfilled(task, 'requestId', {title: task.title, todolistId: task.todoListId});
 
     const endState = tasksReducer(startState, action)
 
@@ -118,7 +126,7 @@ test('correct task should be added to correct array', () => {
     expect(endState["todolistId2"][0].status).toBe(TaskStatuses.New);
 });
 test('status of specified task should be changed', () => {
-    const action = updateTaskAC({
+    const updatedTask = {
         taskId: "2", todolistId: "todolistId2", model: {
             title: '',
             description: '',
@@ -127,7 +135,9 @@ test('status of specified task should be changed', () => {
             startDate: '',
             deadline: ''
         }
-    });
+    };
+    const action = updateTaskTC.fulfilled(updatedTask, 'requestId',
+        {taskId: updatedTask.taskId, todolistId: updatedTask.todolistId, model: updatedTask.model})
 
     const endState = tasksReducer(startState, action)
 
@@ -135,7 +145,7 @@ test('status of specified task should be changed', () => {
     expect(endState["todolistId2"][1].status).toBe(TaskStatuses.New);
 });
 test('title of specified task should be changed', () => {
-    const action = updateTaskAC({
+    const updatedTask = {
         taskId: "2", todolistId: "todolistId2", model: {
             title: 'yogurt',
             description: '',
@@ -144,7 +154,9 @@ test('title of specified task should be changed', () => {
             startDate: '',
             deadline: ''
         }
-    });
+    };
+    const action = updateTaskTC.fulfilled(updatedTask, 'requestId',
+        {taskId: updatedTask.taskId, todolistId: updatedTask.todolistId, model: updatedTask.model})
 
     const endState = tasksReducer(startState, action)
 

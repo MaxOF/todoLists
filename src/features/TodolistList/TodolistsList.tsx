@@ -38,12 +38,12 @@ export const TodolistsList = ({demo = false}: TodolistListPropsType) => {
         dispatch(createTaskTC({todolistId, title}));
     }, [dispatch])
     const changeStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
-        const thunk = updateTaskTC(id, {status}, todolistId)
+        const thunk = updateTaskTC({taskId: id, todolistId, model: {status}})
         dispatch(thunk)
     }, [])
 
     const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
-        const thunk = updateTaskTC(id, {title: newTitle}, todolistId)
+        const thunk = updateTaskTC({taskId: id, todolistId, model: {title: newTitle}})
         dispatch(thunk)
     }, [])
     const removeTask = useCallback(function (id: string, todolistId: string) {
