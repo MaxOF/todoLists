@@ -2,6 +2,7 @@
   "name": "it-incubator-todolist-ts",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://maxof.github.io/todoLists",
   "dependencies": {
     "@material-ui/core": "^4.10.1",
     "@material-ui/icons": "^4.9.1",
@@ -36,7 +37,9 @@
     "storybook": "start-storybook -p 9009",
     "build-storybook": "build-storybook -s public",
     "jest:integration": "jest -c integration/jest.config.js",
-    "test:integration": "start-server-and-test storybook http-get://localhost:9009 jest:integration"
+    "test:integration": "start-server-and-test storybook http-get://localhost:9009 jest:integration",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -73,6 +76,7 @@
     "@storybook/node-logger": "^6.4.14",
     "@storybook/preset-create-react-app": "^3.2.0",
     "@storybook/react": "^6.4.14",
+    "gh-pages": "^3.2.3",
     "jest-image-snapshot": "^4.5.1",
     "jest-puppeteer": "^6.0.3",
     "puppeteer": "^13.1.2",
